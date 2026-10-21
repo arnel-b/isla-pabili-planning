@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1a2b">
+<meta name="description" content="A short preview of the IslaPabili team kickoff for Arnel, Melvs, Kelvs and Joey.">
+<title>IslaPabili Kickoff Preview</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230e1a2b'/%3E%3Cpath d='M18 24h28l-3 24H21z' fill='%23ffb547'/%3E%3Cpath d='M25 24v-4a7 7 0 0 1 14 0v4' fill='none' stroke='%23ffb547' stroke-width='4'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0e1a2b;
+    --bg-2: #13243b;
+    --card: #182c47;
+    --card-2: #1f3656;
+    --line: #2c4566;
+    --ink: #f5f1e8;
+    --muted: #aebbd0;
+    --accent: #ffb547;
+    --accent-ink: #1b1204;
+    --status: #4fd8b4;
+    --decide: #ff8a9b;
+    --radius: 18px;
+    --nav-h: 72px;
+    --pad: clamp(18px, 5vw, 48px);
+    --ease: cubic-bezier(.2, .7, .2, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+  }
+
+  /* ---------- deck ---------- */
+  .deck {
+    position: fixed; inset: 0;
+    height: 100dvh;
+    background:
+      radial-gradient(120% 70% at 100% 0%, rgba(255,181,71,.10), transparent 60%),
+      radial-gradient(90% 60% at 0% 100%, rgba(79,216,180,.07), transparent 60%),
+      var(--bg);
+    touch-action: pan-y;
+  }
+  .progress {
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: rgba(255,255,255,.08); z-index: 5;
+  }
+  .progress span {
+    display: block; height: 100%; width: 10%;
+    background: var(--accent);
+    border-radius: 0 4px 4px 0;
+    transition: width .45s var(--ease);
+  }
+  .slide {
+    position: absolute; inset: 4px 0 var(--nav-h) 0;
+    padding: calc(var(--pad) + env(safe-area-inset-top, 0px)) var(--pad) 24px;
+    overflow-y: auto; overscroll-behavior: contain;
+    display: flex; flex-direction: column;
+    opacity: 0; visibility: hidden;
+    transform: translateX(6%);
+    transition: opacity .45s var(--ease), transform .45s var(--ease), visibility 0s linear .45s;
+  }
+  .slide.is-before { transform: translateX(-6%); }
+  .slide.is-active {
+    opacity: 1; visibility: visible; transform: none;
+    transition: opacity .45s var(--ease), transform .45s var(--ease), visibility 0s;
+  }
+  .inner { width: 100%; max-width: 980px; margin: auto; }
+
+  /* staggered reveal */
+  .r { opacity: 0; transform: translateY(14px); }
+  .is-active .r { animation: rise .55s var(--ease) forwards; animation-delay: calc(var(--d, 0) * 90ms + 120ms); }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  /* ---------- type ---------- */
+  .kicker {
+    font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 10px;
+  }
+  h1, h2 { margin: 0 0 12px; line-height: 1.08; letter-spacing: -.02em; font-weight: 800; }
+  h1 { font-size: clamp(38px, 10vw, 76px); }
+  h2 { font-size: clamp(30px, 7.6vw, 54px); }
+  h3 { margin: 0 0 4px; font-size: 18px; line-height: 1.25; }
+  .lead { font-size: clamp(17px, 4.4vw, 22px); color: var(--muted); margin: 0 0 22px; max-width: 40ch; }
+  .accent { color: var(--accent); }
+  p { margin: 0; }
+  .small { font-size: 15px; color: var(--muted); }
+  .note {
+    margin-top: 20px; font-size: 15px; color: var(--muted);
+    border-left: 3px solid var(--accent); padding: 4px 0 4px 12px;
+  }
+
+  /* ---------- labels ---------- */
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    padding: 6px 10px; border-radius: 999px; margin-bottom: 14px;
+    border: 1px solid currentColor;
+  }
+  .tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .tag.status { color: var(--status); background: rgba(79,216,180,.10); }
+  .tag.proposal { color: var(--accent); background: rgba(255,181,71,.10); }
+  .tag.decide { color: var(--decide); background: rgba(255,138,155,.10); }
+  .mini {
+    display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 999px; vertical-align: middle; margin-left: 4px;
+    color: var(--decide); border: 1px solid currentColor;
+  }
+
+  /* ---------- cards ---------- */
+  .grid { display: grid; gap: 12px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px;
+  }
+  .row { display: flex; gap: 12px; align-items: flex-start; }
+  .icon {
+    flex: none; width: 40px; height: 40px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: rgba(255,181,71,.14); color: var(--accent);
+  }
+  .icon svg { width: 22px; height: 22px; }
+  .icon.ok { background: rgba(79,216,180,.14); color: var(--status); }
+  .icon.q { background: rgba(255,138,155,.14); color: var(--decide); font-weight: 800; font-size: 20px; }
+  .icon.dim { background: rgba(174,187,208,.12); color: var(--muted); }
+
+  /* ---------- slide 1: hero ---------- */
+  .hero { display: grid; gap: 28px; align-items: center; }
+  .names { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .chip {
+    font-size: 15px; font-weight: 700; padding: 8px 14px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--line);
+  }
+  .listcard {
+    position: relative; max-width: 300px; justify-self: center; width: 100%;
+    background: #fbf6ea; color: #2a2116; border-radius: 16px; padding: 18px 18px 14px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.35); transform: rotate(-2.5deg);
+  }
+  .listcard::before {
+    content: ""; position: absolute; top: -9px; left: 50%; width: 70px; height: 18px; margin-left: -35px;
+    background: rgba(255,181,71,.85); border-radius: 4px; transform: rotate(2deg);
+  }
+  .listcard h3 { font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: #8a6a2a; margin-bottom: 10px; }
+  .listcard ul { list-style: none; margin: 0; padding: 0; }
+  .listcard li {
+    display: flex; align-items: center; gap: 10px; padding: 8px 0;
+    border-bottom: 1px dashed #d9ccb0; font-size: 17px; font-weight: 600;
+  }
+  .listcard li:last-child { border-bottom: 0; }
+  .box {
+    flex: none; width: 20px; height: 20px; border: 2px solid #8a6a2a; border-radius: 6px;
+    display: grid; place-items: center;
+  }
+  .box svg { width: 14px; height: 14px; stroke: #1f8f6f; stroke-width: 3.2; fill: none; stroke-dasharray: 20; stroke-dashoffset: 20; }
+  .is-active .box svg { animation: tick .4s var(--ease) forwards; animation-delay: calc(var(--t) * 260ms + 900ms); }
+  @keyframes tick { to { stroke-dashoffset: 0; } }
+  .route { display: block; width: 100%; max-width: 300px; margin: 6px auto 0; height: 70px; justify-self: center; }
+  .route .line { stroke: var(--accent); stroke-width: 3; fill: none; stroke-dasharray: 2 10; stroke-linecap: round; }
+  .is-active .route .line { animation: travel 1.6s linear infinite; }
+  @keyframes travel { to { stroke-dashoffset: -24; } }
+  .hint { margin-top: 18px; font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+  /* ---------- slide 2: flow ---------- */
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .flow li { position: relative; display: flex; gap: 14px; padding: 0 0 22px; }
+  .flow li:last-child { padding-bottom: 0; }
+  .flow li::after {
+    content: ""; position: absolute; left: 25px; top: 54px; bottom: 4px;
+    border-left: 3px dotted var(--accent); opacity: .7;
+  }
+  .flow li:last-child::after { display: none; }
+  .step {
+    flex: none; width: 52px; height: 52px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--card-2); border: 2px solid var(--accent); color: var(--accent);
+  }
+  .step svg { width: 24px; height: 24px; }
+  .flow h3 { margin-top: 4px; }
+
+  /* ---------- slide 3: status ---------- */
+  .have { grid-template-columns: 1fr 1fr; }
+  .have .card { display: flex; gap: 10px; align-items: center; padding: 12px; font-weight: 700; font-size: 15px; }
+  .have .wide { grid-column: 1 / -1; }
+  .subhead { font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 20px 0 10px; }
+  .todo .card { display: flex; gap: 10px; align-items: center; padding: 12px; font-size: 15px; color: var(--muted); background: transparent; border-style: dashed; }
+
+  /* ---------- slide 4: team ---------- */
+  .team { grid-template-columns: 1fr 1fr; }
+  .person { text-align: center; padding: 18px 12px; }
+  .avatar {
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 10px;
+    display: grid; place-items: center; font-size: 26px; font-weight: 800; color: var(--accent-ink);
+  }
+  .person h3 { font-size: 20px; }
+  .person p { font-size: 14px; color: var(--muted); }
+  .a1 { background: #ffb547; } .a2 { background: #4fd8b4; } .a3 { background: #8ab4ff; } .a4 { background: #ff8a9b; }
+
+  /* ---------- slide 5: phases ---------- */
+  .phases { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .phase { position: relative; display: flex; gap: 14px; align-items: flex-start; }
+  .phase .num {
+    flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+    font-weight: 800; font-size: 18px; background: var(--card-2); border: 1px solid var(--line);
+  }
+  .phase .card { flex: 1; padding: 12px 14px; }
+  .phase .card p { font-size: 15px; color: var(--muted); }
+  .phase.now .num { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .phase.now .card { border-color: var(--accent); background: rgba(255,181,71,.08); }
+  .here {
+    display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 800; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 2px 7px; border-radius: 999px; vertical-align: middle;
+  }
+
+  /* ---------- slide 6: beta ---------- */
+  .split { display: grid; gap: 14px; }
+  .checklist { list-style: none; margin: 0; padding: 0; }
+  .checklist li { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 16px; }
+  .checklist li:last-child { border-bottom: 0; }
+  .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); margin-top: 7px; }
+  .laterchips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .laterchips .chip { font-size: 14px; font-weight: 600; color: var(--muted); background: transparent; border-style: dashed; padding: 6px 12px; }
+  .later { align-self: start; }
+  .colhead { font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .colhead.on { color: var(--accent); } .colhead.off { color: var(--muted); }
+
+  /* ---------- slide 7: cycle ---------- */
+  .cycle {
+    display: grid; grid-template-columns: 1fr 34px 1fr; grid-template-rows: auto 34px auto;
+    align-items: center; justify-items: center; max-width: 520px; margin: 0 auto;
+  }
+  .cycle .card { width: 100%; text-align: center; padding: 14px 10px; min-height: 92px; display: grid; place-content: center; }
+  .cycle .card b { display: block; font-size: 17px; }
+  .cycle .card span { font-size: 13px; color: var(--muted); }
+  .cycle .start { border-color: var(--accent); }
+  .arrow { color: var(--accent); width: 26px; height: 26px; }
+  .principles { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; justify-content: center; }
+  .principles .chip { font-size: 14px; }
+
+  /* ---------- slide 8: tasks ---------- */
+  .tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .tasks li { display: flex; gap: 12px; align-items: center; }
+  .tasks .card { flex: 1; display: flex; gap: 12px; align-items: center; padding: 12px 14px; }
+  .tick { flex: none; width: 24px; height: 24px; border: 2px solid var(--accent); border-radius: 7px; }
+  .tasks b { display: block; font-size: 16px; line-height: 1.3; }
+  .vol { font-size: 13px; color: var(--muted); }
+  .vol i { font-style: normal; color: var(--accent); letter-spacing: .1em; }
+
+  /* ---------- slide 9: decisions ---------- */
+  .decisions { grid-template-columns: 1fr; }
+  .decisions .card { display: flex; gap: 12px; align-items: center; padding: 12px 14px; }
+  .decisions b { font-size: 16px; }
+
+  /* ---------- slide 10: closing ---------- */
+  .closing { text-align: center; }
+  .closing .lead { margin-left: auto; margin-right: auto; }
+  .closing .names { justify-content: center; }
+  .home { width: 100%; max-width: 360px; height: 110px; margin: 0 auto 14px; display: block; }
+
+  /* ---------- nav ---------- */
+  .nav {
+    position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+    padding: 0 max(12px, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(12px, env(safe-area-inset-left, 0px));
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: linear-gradient(to top, var(--bg) 70%, rgba(14,26,43,0));
+    z-index: 6;
+  }
+  .btn {
+    min-width: 52px; height: 52px; padding: 0 16px; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    font: inherit; font-size: 16px; font-weight: 700; cursor: pointer;
+    background: var(--card); color: var(--ink); border: 1px solid var(--line);
+    transition: background .2s, opacity .2s;
+  }
+  .btn svg { width: 22px; height: 22px; }
+  .btn.next { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:disabled { opacity: .35; cursor: default; filter: none; }
+  .btn:focus-visible, .slide:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  .counter { font-size: 15px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .counter b { color: var(--ink); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- wider screens ---------- */
+  @media (min-width: 720px) {
+    .hero { grid-template-columns: 1.25fr 1fr; }
+    .flow { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .flow li { flex-direction: column; padding: 0; }
+    .flow li::after { left: 62px; right: -12px; top: 25px; bottom: auto; border-left: 0; border-top: 3px dotted var(--accent); }
+    .have { grid-template-columns: repeat(3, 1fr); }
+    .have .wide { grid-column: span 3; }
+    .todo { grid-template-columns: repeat(3, 1fr); }
+    .team { grid-template-columns: repeat(4, 1fr); }
+    .phases { grid-template-columns: repeat(4, 1fr); }
+    .phase { flex-direction: column; }
+    .phase .card { width: 100%; min-height: 128px; }
+    .split { grid-template-columns: 1.3fr 1fr; gap: 28px; }
+    .decisions { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 720px) and (min-height: 560px) {
+    .slide { justify-content: center; }
+  }
+
+  @media (max-width: 719px) and (max-height: 820px) {
+    :root { --pad: 16px; --nav-h: 66px; }
+    .slide { padding-top: 22px; padding-bottom: 16px; }
+    h1 { font-size: 38px; }
+    h2 { font-size: 29px; margin-bottom: 8px; }
+    .lead { font-size: 16px; margin-bottom: 14px; }
+    .tag { margin-bottom: 10px; }
+    .card { padding: 12px; }
+    .grid { gap: 8px; }
+    .have .card, .todo .card { padding: 8px 10px; font-size: 14px; }
+    .have .icon, .todo .icon { width: 32px; height: 32px; border-radius: 10px; }
+    .subhead { margin: 14px 0 8px; }
+    .person { padding: 12px 8px; }
+    .avatar { width: 46px; height: 46px; font-size: 20px; margin-bottom: 6px; }
+    .person h3 { font-size: 18px; }
+    .person p { font-size: 13.5px; }
+    .flow li { padding-bottom: 16px; }
+    .step { width: 46px; height: 46px; }
+    .flow li::after { left: 22px; top: 48px; }
+    .checklist li { padding: 6px 0; font-size: 15px; }
+    .tasks { gap: 8px; }
+    .tasks .card { padding: 10px 12px; }
+    .tasks b { font-size: 15px; }
+    .decisions .card { padding: 10px 12px; }
+    .decisions .icon { width: 34px; height: 34px; }
+    .note { margin-top: 14px; font-size: 14px; }
+    .btn { height: 48px; min-width: 48px; }
+  }
+
+  @media (max-width: 719px) and (max-height: 720px) {
+    .slide { padding-top: 16px; }
+    h1 { font-size: 32px; }
+    h2 { font-size: 26px; }
+    .kicker { margin-bottom: 6px; font-size: 12px; }
+    .lead { font-size: 15px; margin-bottom: 10px; }
+    .tag { margin-bottom: 8px; padding: 4px 9px; font-size: 11px; }
+    .hero { gap: 14px; }
+    .listcard { padding: 14px 16px 10px; max-width: 260px; }
+    .listcard li { padding: 5px 0; font-size: 15px; }
+    .route { height: 44px; }
+    .hint { margin-top: 10px; }
+    .names .chip { padding: 6px 12px; font-size: 14px; }
+    .have .card, .todo .card { padding: 6px 8px; }
+    .have .icon, .todo .icon { width: 28px; height: 28px; }
+    .have .icon svg, .todo .icon svg { width: 18px; height: 18px; }
+    .phases { gap: 8px; }
+    .phase .num { width: 38px; height: 38px; font-size: 16px; }
+    .phase .card { padding: 8px 12px; }
+    .phase .card p { font-size: 14px; }
+    .checklist li { padding: 5px 0; font-size: 14.5px; }
+    .tasks .card { padding: 8px 10px; }
+    .tasks b { font-size: 14.5px; }
+    .vol { font-size: 12px; }
+    .decisions .card { padding: 8px 10px; }
+    .cycle .card { min-height: 80px; padding: 10px 8px; }
+    .note { margin-top: 10px; }
+  }
+
+  /* "more below" cue for slides taller than the screen */
+  .more {
+    position: absolute; left: 50%; bottom: calc(var(--nav-h) + 8px); transform: translateX(-50%);
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 13px; font-weight: 700; color: var(--accent-ink); background: var(--accent);
+    padding: 5px 12px 5px 14px; border-radius: 999px; border: 0; cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,.4);
+    opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 6;
+  }
+  .more svg { width: 16px; height: 16px; }
+  .deck.has-more .more { opacity: 1; pointer-events: auto; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .r { opacity: 1; transform: none; }
+    .box svg { stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 24 24"><path d="M5 12l4 4 10-10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12H6.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-dash" viewBox="0 0 24 24"><path d="M7 12h10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v16M6 14l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<main class="deck" id="deck" aria-roledescription="carousel" aria-label="IslaPabili kickoff preview">
+  <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+
+  <!-- 1 -->
+  <section class="slide" aria-roledescription="slide" aria-label="1 of 10: Something local, something ours">
+    <div class="inner hero">
+      <div>
+        <p class="kicker r" style="--d:0">IslaPabili · Team kickoff preview</p>
+        <h1 class="r" style="--d:1">Something Local.<br><span class="accent">Something Ours.</span></h1>
+        <p class="lead r" style="--d:2">A pabili service for our own community, built by the four of us. Here's a 3-minute look before we sit down for our kickoff.</p>
+        <div class="names r" style="--d:3"><span class="chip">Arnel</span><span class="chip">Melvs</span><span class="chip">Kelvs</span><span class="chip">Joey</span></div>
+        <p class="hint r" style="--d:4">Swipe, use the arrow keys, or tap Next <svg width="18" height="18" aria-hidden="true"><use href="#i-right"/></svg></p>
+      </div>
+      <div class="r" style="--d:2">
+        <div class="listcard" role="img" aria-label="Illustration: a handwritten pabili list being checked off">
+          <h3>Pabili list</h3>
+          <ul>
+            <li><span class="box"><svg viewBox="0 0 16 16" style="--t:0"><path d="M3 8.5l3 3 7-7"/></svg></span>Bigas</li>
+            <li><span class="box"><svg viewBox="0 0 16 16" style="--t:1"><path d="M3 8.5l3 3 7-7"/></svg></span>Gamot</li>
+            <li><span class="box"><svg viewBox="0 0 16 16" style="--t:2"><path d="M3 8.5l3 3 7-7"/></svg></span>Sabon</li>
+            <li><span class="box"><svg viewBox="0 0 16 16" style="--t:3"><path d="M3 8.5l3 3 7-7"/></svg></span>Anything you need</li>
+          </ul>
+        </div>
+        <svg class="route" viewBox="0 0 300 70" aria-hidden="true">
+          <path class="line" d="M150 4 C 150 40, 60 30, 60 52 S 200 52, 244 54"/>
+          <g transform="translate(250 34)" fill="none" stroke="#ffb547" stroke-width="2.4" stroke-linejoin="round"><path d="M2 12 L12 4 L22 12 V28 H2 Z"/><path d="M9 28 V19 H15 V28"/></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide" aria-roledescription="slide" aria-label="2 of 10: The idea">
+    <div class="inner">
+      <span class="tag status r" style="--d:0">Current concept</span>
+      <h2 class="r" style="--d:1">“Bili mo ako nito.”</h2>
+      <p class="lead r" style="--d:2">You write the list. A rider buys it. It arrives at your door.</p>
+      <ol class="flow">
+        <li class="r" style="--d:3"><span class="step"><svg aria-hidden="true"><use href="#i-list"/></svg></span><div><h3>Customer writes a pabili list</h3><p class="small">Anything they need, not tied to one store</p></div></li>
+        <li class="r" style="--d:4"><span class="step"><svg aria-hidden="true"><use href="#i-hand"/></svg></span><div><h3>A rider accepts it</h3><p class="small">Available riders see the request</p></div></li>
+        <li class="r" style="--d:5"><span class="step"><svg aria-hidden="true"><use href="#i-bag"/></svg></span><div><h3>The rider buys the items</h3><p class="small">And keeps the customer updated</p></div></li>
+        <li class="r" style="--d:6"><span class="step"><svg aria-hidden="true"><use href="#i-home"/></svg></span><div><h3>Delivered to the door</h3><p class="small">The customer confirms receipt</p></div></li>
+      </ol>
+      <p class="note r" style="--d:7">Pabili comes first. Merchant catalogs can come later.</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide" aria-roledescription="slide" aria-label="3 of 10: We're not starting from zero">
+    <div class="inner">
+      <span class="tag status r" style="--d:0">Current status</span>
+      <h2 class="r" style="--d:1">We're not starting from zero.</h2>
+      <p class="lead r" style="--d:2">A working pre-beta app already exists, built with React Native and Firebase.</p>
+      <div class="grid have">
+        <div class="card wide r" style="--d:3"><span class="icon ok"><svg aria-hidden="true"><use href="#i-check"/></svg></span>Working pre-beta APK</div>
+        <div class="card r" style="--d:4"><span class="icon ok"><svg aria-hidden="true"><use href="#i-check"/></svg></span>Login</div>
+        <div class="card r" style="--d:4"><span class="icon ok"><svg aria-hidden="true"><use href="#i-check"/></svg></span>Pabili list</div>
+        <div class="card r" style="--d:5"><span class="icon ok"><svg aria-hidden="true"><use href="#i-check"/></svg></span>Rider functions</div>
+        <div class="card r" style="--d:5"><span class="icon ok"><svg aria-hidden="true"><use href="#i-check"/></svg></span>Order flow</div>
+        <div class="card wide r" style="--d:6"><span class="icon ok"><svg aria-hidden="true"><use href="#i-check"/></svg></span>“ISLANDLINK” trademark approved by IPOPHL</div>
+      </div>
+      <p class="subhead r" style="--d:7">Not yet</p>
+      <div class="grid todo">
+        <div class="card r" style="--d:7"><span class="icon dim"><svg aria-hidden="true"><use href="#i-dash"/></svg></span>Some screens are still placeholders</div>
+        <div class="card r" style="--d:8"><span class="icon dim"><svg aria-hidden="true"><use href="#i-dash"/></svg></span>Source code and app access not yet shared with the team</div>
+        <div class="card r" style="--d:8"><span class="icon dim"><svg aria-hidden="true"><use href="#i-dash"/></svg></span>Government requirements not yet mapped</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide" aria-roledescription="slide" aria-label="4 of 10: Four people, one project">
+    <div class="inner">
+      <span class="tag status r" style="--d:0">Current roles</span>
+      <h2 class="r" style="--d:1">Four people, one project.</h2>
+      <p class="lead r" style="--d:2">Different skills, equal say.</p>
+      <div class="grid team">
+        <div class="card person r" style="--d:3"><div class="avatar a1" aria-hidden="true">A</div><h3>Arnel</h3><p>Planning, coordination, documentation and technical support</p></div>
+        <div class="card person r" style="--d:4"><div class="avatar a2" aria-hidden="true">M</div><h3>Melvs</h3><p>App development</p></div>
+        <div class="card person r" style="--d:5"><div class="avatar a3" aria-hidden="true">K</div><h3>Kelvs</h3><p>Field operations, surveys and compliance research</p></div>
+        <div class="card person r" style="--d:6"><div class="avatar a4" aria-hidden="true">J</div><h3>Joey</h3><p>Graphics, design and marketing</p></div>
+      </div>
+      <p class="note r" style="--d:7">We work as equals. No permanent boss. Roles can change as we grow, by agreement.</p>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide" aria-roledescription="slide" aria-label="5 of 10: Start small, learn fast">
+    <div class="inner">
+      <span class="tag proposal r" style="--d:0">Proposal</span>
+      <h2 class="r" style="--d:1">Start small. Learn fast.</h2>
+      <p class="lead r" style="--d:2">Master the basics first, then grow one step at a time.</p>
+      <ol class="phases">
+        <li class="phase now r" style="--d:3"><span class="num">0</span><div class="card"><h3>Internal test <span class="here">Next up</span></h3><p>The four of us as customers and riders</p></div></li>
+        <li class="phase r" style="--d:4"><span class="num">1</span><div class="card"><h3>Friends &amp; family beta</h3><p>One barangay, on weekends, with friends and relatives</p></div></li>
+        <li class="phase r" style="--d:5"><span class="num">2</span><div class="card"><h3>Town launch</h3><p>Public in one town, with a few recruited riders</p></div></li>
+        <li class="phase r" style="--d:6"><span class="num">3</span><div class="card"><h3>Expand</h3><p>More towns and merchants</p></div></li>
+      </ol>
+      <p class="note r" style="--d:7">Proposed phases, not commitments. We move on only when a phase meets its conditions, and we set any dates together.</p>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide" aria-roledescription="slide" aria-label="6 of 10: The first beta">
+    <div class="inner">
+      <span class="tag proposal r" style="--d:0">Proposal</span>
+      <h2 class="r" style="--d:1">The first beta.</h2>
+      <p class="lead r" style="--d:2">Just the basics, done reliably.</p>
+      <div class="split">
+        <div class="card r" style="--d:3">
+          <p class="colhead on">In the first beta</p>
+          <ul class="checklist">
+            <li><span class="dot"></span>Custom pabili list, with photo</li>
+            <li><span class="dot"></span>Rider accepts and updates the order</li>
+            <li><span class="dot"></span>Receipt photo shown to the customer</li>
+            <li><span class="dot"></span>Call or message the rider</li>
+            <li><span class="dot"></span>Handling unavailable items, cancellations and refused orders</li>
+            <li><span class="dot"></span><span>Simple fare <span class="mini">To decide</span></span></li>
+            <li><span class="dot"></span><span>COD plus manual GCash prepay <span class="mini">Rule to decide</span></span></li>
+          </ul>
+        </div>
+        <div class="later r" style="--d:4">
+          <p class="colhead off">Later, not now</p>
+          <div class="laterchips">
+            <span class="chip">Live GPS tracking</span>
+            <span class="chip">Merchant catalogs</span>
+            <span class="chip">In-app GCash or Maya payments</span>
+            <span class="chip">Ratings and reviews</span>
+            <span class="chip">Promo vouchers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide" aria-roledescription="slide" aria-label="7 of 10: How we'll work together">
+    <div class="inner">
+      <span class="tag proposal r" style="--d:0">Proposed rhythm</span>
+      <h2 class="r" style="--d:1">How we'll work together.</h2>
+      <p class="lead r" style="--d:2">A simple weekly loop.</p>
+      <div class="cycle r" style="--d:3" role="img" aria-label="Weekly loop: plan together, work and share updates, review and learn, plan the next week, then repeat">
+        <div class="card start"><b>Plan together</b><span>Agree on the week's goals</span></div>
+        <svg class="arrow" aria-hidden="true"><use href="#i-right"/></svg>
+        <div class="card"><b>Work &amp; share</b><span>Updates and blockers, early</span></div>
+        <svg class="arrow" style="transform:rotate(180deg)" aria-hidden="true"><use href="#i-down"/></svg>
+        <span></span>
+        <svg class="arrow" aria-hidden="true"><use href="#i-down"/></svg>
+        <div class="card"><b>Plan next week</b><span>Then repeat</span></div>
+        <svg class="arrow" aria-hidden="true"><use href="#i-left"/></svg>
+        <div class="card"><b>Review &amp; learn</b><span>What worked, what didn't</span></div>
+      </div>
+      <div class="principles r" style="--d:4">
+        <span class="chip">Everyone has an equal say</span>
+        <span class="chip">Big decisions made together</span>
+        <span class="chip">Agreed plans written down, not lost in chat</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide" aria-roledescription="slide" aria-label="8 of 10: The next two weeks">
+    <div class="inner">
+      <span class="tag proposal r" style="--d:0">Proposal</span>
+      <h2 class="r" style="--d:1">The next two weeks.</h2>
+      <p class="lead r" style="--d:2">Five first tasks. No one is assigned yet.</p>
+      <ol class="tasks">
+        <li class="r" style="--d:3"><div class="card"><span class="tick" aria-hidden="true"></span><div><b>Set up a shared workspace</b><span class="vol">Volunteer: <i>____</i></span></div></div></li>
+        <li class="r" style="--d:4"><div class="card"><span class="tick" aria-hidden="true"></span><div><b>Share the source code and app account access</b><span class="vol">Volunteer: <i>____</i></span></div></div></li>
+        <li class="r" style="--d:5"><div class="card"><span class="tick" aria-hidden="true"></span><div><b>List what works and what's still a placeholder</b><span class="vol">Volunteer: <i>____</i></span></div></div></li>
+        <li class="r" style="--d:6"><div class="card"><span class="tick" aria-hidden="true"></span><div><b>Map government, regulatory and licensing requirements</b><span class="vol">Volunteer: <i>____</i></span></div></div></li>
+        <li class="r" style="--d:7"><div class="card"><span class="tick" aria-hidden="true"></span><div><b>Complete 10 internal test orders and write down every problem</b><span class="vol">Volunteer: <i>____</i></span></div></div></li>
+      </ol>
+      <p class="note r" style="--d:8">We pick volunteers and target dates together at the kickoff.</p>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide" aria-roledescription="slide" aria-label="9 of 10: Decisions we get to make together">
+    <div class="inner">
+      <span class="tag decide r" style="--d:0">To decide</span>
+      <h2 class="r" style="--d:1">Decisions we get to make together.</h2>
+      <p class="lead r" style="--d:2">Open questions for the kickoff. Nothing here is decided yet.</p>
+      <div class="grid decisions">
+        <div class="card r" style="--d:3"><span class="icon q" aria-hidden="true">?</span><b>Which shared workspace do we use?</b></div>
+        <div class="card r" style="--d:4"><span class="icon q" aria-hidden="true">?</span><b>How do we share code and app accounts?</b></div>
+        <div class="card r" style="--d:5"><span class="icon q" aria-hidden="true">?</span><b>What's in the beta, and what waits?</b></div>
+        <div class="card r" style="--d:6"><span class="icon q" aria-hidden="true">?</span><b>When is our weekly meeting?</b></div>
+        <div class="card r" style="--d:7"><span class="icon q" aria-hidden="true">?</span><b>How do we break a deadlock?</b></div>
+      </div>
+      <p class="note r" style="--d:8">Before the beta, we also decide the payment rule, the fare, the barangay, and what happens with unavailable items and cancellations.</p>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide" aria-roledescription="slide" aria-label="10 of 10: Let's make it real">
+    <div class="inner closing">
+      <svg class="home r" style="--d:0" viewBox="0 0 360 110" aria-hidden="true">
+        <g fill="none" stroke="#fbf6ea" stroke-width="2.4" stroke-linejoin="round"><rect x="14" y="42" width="44" height="54" rx="6"/><path d="M24 58h24M24 70h24M24 82h16"/></g>
+        <path class="route-line" d="M66 70 C 120 20, 170 110, 230 62 S 280 50, 296 66" fill="none" stroke="#ffb547" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 10"/>
+        <g fill="none" stroke="#ffb547" stroke-width="2.6" stroke-linejoin="round"><path d="M300 66 L324 46 L348 66 V100 H300 Z"/><path d="M317 100 V80 H331 V100"/></g>
+      </svg>
+      <h2 class="r" style="--d:1">Let's make it <span class="accent">real.</span></h2>
+      <p class="lead r" style="--d:2">We already have a working app and a clear idea. Next, we turn them into something people in our community can actually test and use.</p>
+      <p class="lead r" style="--d:3">Bring your thoughts, questions and ideas to the kickoff. This is a starting point, and the four of us will shape it together.</p>
+      <div class="names r" style="--d:4"><span class="chip">Arnel</span><span class="chip">Melvs</span><span class="chip">Kelvs</span><span class="chip">Joey</span></div>
+    </div>
+  </section>
+
+  <nav class="nav" aria-label="Slide navigation">
+    <button class="btn prev" id="prev" type="button" aria-label="Previous slide"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
+    <div class="counter" aria-hidden="true"><b id="cur">1</b> / <span id="total">10</span></div>
+    <button class="btn next" id="next" type="button" aria-label="Next slide"><span id="nextLabel">Next</span><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+  </nav>
+  <button class="more" id="more" type="button" tabindex="-1" aria-hidden="true">More<svg aria-hidden="true"><use href="#i-down"/></svg></button>
+  <p class="sr" id="live" aria-live="polite"></p>
+</main>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var bar = document.getElementById('bar');
+  var cur = document.getElementById('cur');
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var nextLabel = document.getElementById('nextLabel');
+  var live = document.getElementById('live');
+  var total = slides.length;
+  var index = -1;
+  document.getElementById('total').textContent = total;
+
+  function fromHash() {
+    var n = parseInt((location.hash || '').replace('#', ''), 10);
+    return isNaN(n) ? 0 : n - 1;
+  }
+
+  function go(n, announce) {
+    n = Math.max(0, Math.min(total - 1, n));
+    if (n === index) return;
+    index = n;
+    slides.forEach(function (s, k) {
+      var active = k === n;
+      s.classList.toggle('is-active', active);
+      s.classList.toggle('is-before', k < n);
+      s.setAttribute('aria-hidden', active ? 'false' : 'true');
+      if ('inert' in s) s.inert = !active;
+    });
+    slides[n].scrollTop = 0;
+    cur.textContent = n + 1;
+    bar.style.width = ((n + 1) / total * 100) + '%';
+    prev.disabled = n === 0;
+    next.disabled = n === total - 1;
+    nextLabel.textContent = n === total - 1 ? 'End' : 'Next';
+    if (history.replaceState) history.replaceState(null, '', '#' + (n + 1));
+    if (announce) live.textContent = slides[n].getAttribute('aria-label');
+    updateMore();
+  }
+
+  // Show a "More" cue while the active slide has content below the fold.
+  var deckEl = document.getElementById('deck');
+  function updateMore() {
+    var s = slides[index];
+    deckEl.classList.toggle('has-more', s.scrollHeight - s.clientHeight - s.scrollTop > 12);
+  }
+  slides.forEach(function (s) { s.addEventListener('scroll', updateMore, { passive: true }); });
+  window.addEventListener('resize', updateMore);
+  document.getElementById('more').addEventListener('click', function () {
+    var s = slides[index];
+    s.scrollBy({ top: s.clientHeight * 0.7, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
+
+  prev.addEventListener('click', function () { go(index - 1, true); });
+  next.addEventListener('click', function () { go(index + 1, true); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var t = e.target.tagName;
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && t !== 'BUTTON')) { e.preventDefault(); go(index + 1, true); }
+    else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); go(index - 1, true); }
+    else if (k === 'Home') { e.preventDefault(); go(0, true); }
+    else if (k === 'End') { e.preventDefault(); go(total - 1, true); }
+  });
+
+  // Swipe: horizontal gestures change slides; vertical ones still scroll a tall slide.
+  var sx = 0, sy = 0, tracking = false;
+  var deck = document.getElementById('deck');
+  deck.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) { tracking = false; return; }
+    tracking = true; sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  deck.addEventListener('touchend', function (e) {
+    if (!tracking) return;
+    tracking = false;
+    var dx = e.changedTouches[0].clientX - sx;
+    var dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) go(index + (dx < 0 ? 1 : -1), true);
+  }, { passive: true });
+
+  window.addEventListener('hashchange', function () { go(fromHash(), true); });
+  go(fromHash(), false);
+})();
+</script>
+</body>
+</html>
