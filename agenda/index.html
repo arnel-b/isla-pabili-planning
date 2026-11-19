@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1a2b">
+<meta name="description" content="Agenda for the IslaPabili team's online meeting on Friday, Nov 20, 2026.">
+<title>IslaPabili Meeting Agenda</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230e1a2b'/%3E%3Cpath d='M18 24h28l-3 24H21z' fill='%23ffb547'/%3E%3Cpath d='M25 24v-4a7 7 0 0 1 14 0v4' fill='none' stroke='%23ffb547' stroke-width='4'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0e1a2b;
+    --card: #182c47;
+    --card-2: #1f3656;
+    --line: #2c4566;
+    --ink: #f5f1e8;
+    --muted: #aebbd0;
+    --accent: #ffb547;
+    --accent-ink: #1b1204;
+    --teal: #4fd8b4;
+    --rose: #ff8a9b;
+    --sky: #7cb8ff;
+    --lilac: #c3a6ff;
+    --radius: 18px;
+    --pad: clamp(16px, 5vw, 40px);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(120% 60% at 100% 0%, rgba(255,181,71,.10), transparent 60%),
+      radial-gradient(90% 50% at 0% 100%, rgba(79,216,180,.07), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: calc(var(--pad) + env(safe-area-inset-top, 0px)) var(--pad) 48px; }
+
+  /* ---------- header ---------- */
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; font-weight: 600; letter-spacing: .3px; }
+  .brand svg { width: 28px; height: 28px; flex: none; }
+  .kicker { margin: 28px 0 8px; color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; }
+  h1 { margin: 0; font-size: clamp(30px, 6.4vw, 48px); line-height: 1.08; letter-spacing: -.8px; }
+  .sub { margin: 12px 0 0; color: var(--muted); font-size: clamp(16px, 2.4vw, 18px); max-width: 560px; }
+
+  .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 28px 0 0; }
+  .fact { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; min-width: 0; }
+  .fact .l { color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; }
+  .fact .v { margin-top: 4px; font-size: 16px; font-weight: 650; overflow-wrap: anywhere; }
+  .fact .v.tba { color: var(--muted); font-weight: 500; font-style: italic; }
+
+  .join {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    margin: 12px 0 0; padding: 16px 16px 16px 20px;
+    background: linear-gradient(135deg, rgba(255,181,71,.16), rgba(255,181,71,.05));
+    border: 1px solid rgba(255,181,71,.45); border-radius: var(--radius);
+  }
+  .join .l { color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; }
+  .join .v { font-size: 17px; font-weight: 650; overflow-wrap: anywhere; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 20px; border-radius: 999px;
+    background: var(--accent); color: var(--accent-ink);
+    font-weight: 750; font-size: 16px; text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,181,71,.3); }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .btn svg { width: 20px; height: 20px; }
+
+  /* ---------- time split ---------- */
+  h2 { margin: 44px 0 14px; font-size: 22px; letter-spacing: -.2px; }
+  .split { display: flex; height: 12px; border-radius: 999px; overflow: hidden; gap: 3px; }
+  .split span { display: block; height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 10px 0 0; padding: 0; list-style: none; color: var(--muted); font-size: 13px; }
+  .legend li { display: flex; align-items: center; gap: 6px; }
+  .legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+  /* ---------- agenda ---------- */
+  ol.agenda { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; counter-reset: item; }
+  .item {
+    --c: var(--accent);
+    position: relative;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 20px 18px 74px;
+  }
+  .item::before {
+    counter-increment: item; content: counter(item);
+    position: absolute; left: 18px; top: 18px;
+    width: 38px; height: 38px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: color-mix(in srgb, var(--c) 18%, transparent);
+    color: var(--c); font-weight: 800; font-size: 17px;
+  }
+  .item::after { content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 4px; border-radius: 0 4px 4px 0; background: var(--c); }
+  .head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .item h3 { margin: 0; font-size: 19px; letter-spacing: -.1px; }
+  .meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .who { padding: 3px 11px; border-radius: 999px; background: var(--card-2); border: 1px solid var(--line); font-size: 13px; font-weight: 650; white-space: nowrap; }
+  .min { color: var(--muted); font-size: 13px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .item ul { margin: 10px 0 0; padding-left: 18px; color: #dfe6f0; list-style: disc; }
+  .item ul ul { list-style: square; }
+  .item li { margin: 5px 0; }
+  .item li::marker { color: var(--c); }
+  .item ul ul { margin-top: 6px; color: var(--muted); }
+  .ref {
+    display: inline-block; margin-left: 4px; padding: 0 7px; border-radius: 6px;
+    background: rgba(255,255,255,.07); color: var(--c);
+    font-size: 12px; font-weight: 750; letter-spacing: .3px; vertical-align: 1px; white-space: nowrap;
+  }
+  .c1 { --c: var(--sky); } .c2 { --c: var(--accent); } .c3 { --c: var(--teal); }
+  .c4 { --c: var(--rose); } .c5 { --c: var(--lilac); } .c6 { --c: var(--sky); }
+
+  .total { display: flex; justify-content: space-between; margin: 12px 0 0; padding: 14px 20px; border-radius: 14px; border: 1px dashed var(--line); color: var(--muted); font-weight: 650; }
+  .total b { color: var(--ink); }
+
+  footer { margin: 40px 0 0; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 680px) {
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .item { padding: 16px 16px 16px 62px; }
+    .item::before { left: 14px; top: 16px; width: 34px; height: 34px; font-size: 15px; border-radius: 10px; }
+    .join { padding: 16px; }
+    .btn { width: 100%; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+
+  @media print {
+    :root { --bg: #fff; --card: #fff; --card-2: #f2f4f7; --line: #cfd6de; --ink: #1d2329; --muted: #5b6670; --accent: #b86e00; --teal: #0d7a63; --rose: #b8324a; --sky: #1f62b5; --lilac: #6a45b8; }
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    .item ul { color: var(--ink); }
+    .item, .fact, .join { break-inside: avoid; }
+    .btn { display: none; }
+    .join { background: none; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#182c47"/><path d="M18 24h28l-3 24H21z" fill="#ffb547"/><path d="M25 24v-4a7 7 0 0 1 14 0v4" fill="none" stroke="#ffb547" stroke-width="4"/></svg>
+    IslaPabili
+  </div>
+
+  <p class="kicker">Team meeting · Online</p>
+  <h1>Meeting agenda</h1>
+  <p class="sub">App updates, test results, compliance and branding, then who takes what next.</p>
+
+  <section class="facts" aria-label="Meeting details">
+    <div class="fact"><div class="l">Date</div><div class="v">Fri, Nov 20, 2026</div></div>
+    <div class="fact"><div class="l">Time</div><div class="v tba">To be announced</div></div>
+    <div class="fact"><div class="l">Length</div><div class="v">About 60 min</div></div>
+    <div class="fact"><div class="l">Facilitator</div><div class="v">Kelvs</div></div>
+  </section>
+
+  <section class="join" aria-label="Meeting link">
+    <div>
+      <div class="l">Google Meet</div>
+      <div class="v">meet.google.com/ghm-obbz-qxi</div>
+    </div>
+    <a class="btn" href="https://meet.google.com/ghm-obbz-qxi" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="13" height="12" rx="2.5"/><path d="m15 10 6-3.5v11L15 14"/></svg>
+      Join the meeting
+    </a>
+  </section>
+
+  <h2>How the hour is split</h2>
+  <div class="split" role="img" aria-label="Opening 5 minutes, app updates 15, test results 15, compliance 10, branding 10, wrap-up 5">
+    <span style="flex:5;background:var(--sky)"></span>
+    <span style="flex:15;background:var(--accent)"></span>
+    <span style="flex:15;background:var(--teal)"></span>
+    <span style="flex:10;background:var(--rose)"></span>
+    <span style="flex:10;background:var(--lilac)"></span>
+    <span style="flex:5;background:var(--sky);opacity:.6"></span>
+  </div>
+  <ul class="legend">
+    <li><i style="background:var(--sky)"></i>Opening and wrap-up · Kelvs</li>
+    <li><i style="background:var(--accent)"></i>App · Melvs</li>
+    <li><i style="background:var(--teal)"></i>Tests · Arnel</li>
+    <li><i style="background:var(--rose)"></i>Compliance · Kelvs and Mico</li>
+    <li><i style="background:var(--lilac)"></i>Branding · Joey</li>
+  </ul>
+
+  <h2>Agenda</h2>
+  <ol class="agenda">
+    <li class="item c1">
+      <div class="head"><h3>Opening</h3><div class="meta"><span class="who">Kelvs</span><span class="min">5 min</span></div></div>
+      <ul><li>Goals for today and a quick round of updates</li></ul>
+    </li>
+
+    <li class="item c2">
+      <div class="head"><h3>App updates</h3><div class="meta"><span class="who">Melvs</span><span class="min">15 min</span></div></div>
+      <ul>
+        <li>What's new in the app since Nov 6</li>
+        <li>Google Play: the closed test ends around Nov 19-20. Are we ready to go public? <span class="ref">D26</span></li>
+        <li>App vs. what we decided, to confirm or update:
+          <ul>
+            <li>Rider queue is 5 min by default, but we decided 2 min <span class="ref">D15</span></li>
+            <li>Fare estimate goes store → drop-off <span class="ref">D11</span></li>
+            <li>The live tracking map is built, but we had parked it <span class="ref">D03</span></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+    <li class="item c3">
+      <div class="head"><h3>Test results</h3><div class="meta"><span class="who">Arnel</span><span class="min">15 min</span></div></div>
+      <ul>
+        <li>Four rounds of app testing on a local copy (Nov 17-18), not on the live app:
+          <ul>
+            <li>Many riders accepting orders at the same time</li>
+            <li>Heavy traffic, up to 10x what we expect at beta</li>
+            <li>A database filled with a large order history</li>
+            <li>Live updates with many phones connected</li>
+          </ul>
+        </li>
+        <li>Findings and next steps</li>
+      </ul>
+    </li>
+
+    <li class="item c4">
+      <div class="head"><h3>Compliance</h3><div class="meta"><span class="who">Kelvs and Mico</span><span class="min">10 min</span></div></div>
+      <ul>
+        <li>Office follow-ups (DICT, permits, registration)</li>
+        <li>Field testing: orders placed since Nov 5</li>
+      </ul>
+    </li>
+
+    <li class="item c5">
+      <div class="head"><h3>Branding and images</h3><div class="meta"><span class="who">Joey</span><span class="min">10 min</span></div></div>
+      <ul>
+        <li>Official brand colors <span class="ref">D25</span></li>
+        <li>Images needed for the app, Play Store and landing page</li>
+      </ul>
+    </li>
+
+    <li class="item c6">
+      <div class="head"><h3>Wrap-up</h3><div class="meta"><span class="who">Kelvs</span><span class="min">5 min</span></div></div>
+      <ul>
+        <li>Still open: how we collect commission <span class="ref">D24</span> and how long we keep old order data <span class="ref">D27</span>. Decide now or set a date.</li>
+        <li>Who takes what, and when we meet next</li>
+      </ul>
+    </li>
+  </ol>
+
+  <div class="total"><span>Total</span><b>60 min</b></div>
+
+  <footer>
+    <span>D numbers refer to the Decisions tab in our project tracker.</span>
+    <span>IslaPabili · Nov 20, 2026</span>
+  </footer>
+</main>
+</body>
+</html>
